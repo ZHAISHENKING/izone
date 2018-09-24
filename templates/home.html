@@ -1,0 +1,36 @@
+<html>
+    <style>
+        .login{
+            text-align: center;
+        }
+        a{
+            display: block;
+            text-decoration: none;
+            width: 150px;
+            border-radius: 10px;
+            line-height: 40px;
+            margin: 20px auto;
+            background-color: #c1272d;
+            color: #ffffff;
+        }
+        p{
+            margin: 50px 0;
+            font-size: 26px;
+        }
+
+    </style>
+    <body>
+        <div class="login">
+            {% if user and user.is_authenticated %}
+                <p>Hello {{ user.login }}!</p>
+                <a href="{{ url_for('api.logout') }}">退出登录</a>
+            {% else %}
+                <p>Admin管理后台</p>
+                <a href="{{ url_for('api.login') }}">登录</a>&nbsp;
+            {% endif %}
+        </div>
+        <div class="login">
+            <a href="/api/admin/" class="login-a">Go to admin!</a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form action="/api/up_video/" method="post" enctype='multipart/form-data'>
+    <p>视频</p>
+    <input type="file" name="video">
+    <p>描述</p>
+    <input type="text" name="desc">
+    <p>时长</p>
+    <input type="text" name="time_long">
+    <p>缩略图</p>
+    <input type="text" name="small_img">
+    <button>提交</button>
+</form>
+</body>
+</html>

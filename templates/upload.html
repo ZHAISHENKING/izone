@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form action="/api/upload/" method="post" enctype="multipart/form-data">
+    <p>图片</p>
+    <input type="file" name="image">
+    <p>描述</p>
+    <input type="text" name="desc">
+    <p>分类</p>
+    <select name="category">
+        {% for i in category %}
+        <option value="{{i.id}}">{{i.title}}</option>
+        {% endfor %}
+    </select>
+    <button>提交</button>
+</form>
+</body>
+</html>

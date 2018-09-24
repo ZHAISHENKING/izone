@@ -1,0 +1,46 @@
+<html>
+    <style>
+        .concent{
+            text-align: center;
+        }
+        .tab{
+            margin: 50px 0;
+            font-size: 20px;
+        }
+        input{
+            line-height: 30px;
+            width: 200px;
+            outline: none;
+        }
+        .submit{
+            width: 150px;
+            border: 0;
+            outline: none;
+            border-radius: 10px;
+            line-height: 35px;
+            height: 35px;
+            font-size: 20px;
+            background-color: #c1272d;
+            color: #ffffff;
+        }
+    </style>
+    <body>
+        <form method="POST" action="" class="concent">
+            {{ form.hidden_tag() if form.hidden_tag }}
+            {% for f in form if f.type != 'CSRFTokenField' %}
+            <div class="tab">
+            {{ f.label }}
+            {{ f }}
+            {% if f.errors %}
+            <ul>
+                {% for e in f.errors %}
+                <li>{{ e }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            </div>
+            {% endfor %}
+            <input type="submit" class="submit"/>
+        </form>
+    </body>
+</html>
