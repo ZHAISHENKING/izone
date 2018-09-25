@@ -75,7 +75,8 @@ class GetAllCategory(Resource):
 
 class GetPic(Resource):
     @catch_exception
-    def get(self, id):
+    def post(self):
+        id = request.json["id"]
         c = Category.query.filter_by(id=int(id)).first()
         pic = Picture.query.filter_by(category=c).all()
         result = []

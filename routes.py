@@ -21,7 +21,7 @@ docs.add_resource(LoginView, '/login/', endpoint="login")
 docs.add_resource(Upload, '/upload/')
 docs.add_resource(GetAllImage, '/image/all/')
 docs.add_resource(GetAllCategory, '/category/all/')
-docs.add_resource(GetPic, '/image/<id>/')
+docs.add_resource(GetPic, '/image/')
 docs.add_resource(VideoUpload, '/up_video/')
 docs.add_resource(GetAllVideo, '/video/all/')
 
