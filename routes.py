@@ -24,5 +24,7 @@ docs.add_resource(GetAllCategory, '/category/all/')
 docs.add_resource(GetPic, '/image/')
 docs.add_resource(VideoUpload, '/up_video/')
 docs.add_resource(GetAllVideo, '/video/all/')
-
-
+docs.add_resource(UploadPart, '/file/upload/', endpoint="upload_part")
+docs.add_resource(UploadMerge, '/file/merge/', endpoint="upload_success")
+docs.add_resource(FileList, '/file/list/', endpoint="file_list")
+docs.add_resource(FileDwonload, '/file/download/<filename>/', endpoint="file_download")
