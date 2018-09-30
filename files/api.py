@@ -12,16 +12,11 @@ class VideoUpload(Resource):
 
     @catch_exception
     def post(self):
-        up = UpFile()
         data = request.values
-        f = request.files["video"]
-        filename = secure_filename(f.filename)
-        f.save(filename)
-        mime = filename.rsplit(".")[1]
-        qiniu_url = up.upload_img(filename, mime)
-        if qiniu_url:
+        print(data["video"])
+        if data["video"]:
             v = Video(
-                video_url=qiniu_url,
+                video_url=data["video"],
                 desc=data["desc"],
                 small_img=data["small_img"],
                 time_long=int(data["time_long"])
@@ -29,7 +24,7 @@ class VideoUpload(Resource):
             )
             db.session.add(v)
             db.session.commit()
-            return trueReturn(qiniu_url)
+            return trueReturn(data["video"])
         else:
             return falseReturn("上传失败")
 

@@ -31,7 +31,7 @@
             </div>
 
             <div id="file" class="input-group">
-                <input type="text" name="file" class="form-control">
+                <input type="text" name="video" class="form-control">
             </div>
 
             <div class="input-group">
@@ -94,7 +94,8 @@
             $('.progress-bar').text('上传完成');
             $("#up").css('display','none');
             $('#file').css('display','block');
-            $('[name=file]').value("https://oj.s001.xin/api/fileadmin/download"+file.source['name'])
+            console.log(data);
+            $('[name=video]').attr('value',"https://oj.s001.xin/api/fileadmin/download/"+file.source['name'])
         });
 
         uploader.on('uploadError', function(file) { // 上传过程中发生异常，调用该方法
