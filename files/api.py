@@ -12,13 +12,18 @@ class VideoUpload(Resource):
 
     @catch_exception
     def post(self):
+        up = UpFile()
         data = request.values
-        print(data["video"])
+        f = request.files["small_img"]
+        filename = secure_filename(f.filename)
+        f.save(filename)
+        mime = filename.rsplit(".")[1]
+        qiniu_url = up.upload_img(filename, mime)
         if data["video"]:
             v = Video(
                 video_url=data["video"],
                 desc=data["desc"],
-                small_img=data["small_img"],
+                small_img=qiniu_url,
                 time_long=int(data["time_long"])
 
             )
