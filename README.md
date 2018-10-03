@@ -24,6 +24,6 @@ pip install -r req.txt
 python manage.py db init
 python manage.py db migrate
 python manage.py db upgrade
-# 以上都没有问题
+# 如果以上都没有问题
 python manage.py runserver
 ```
