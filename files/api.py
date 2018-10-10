@@ -5,6 +5,11 @@ from admins import db
 from flask import render_template as rt, make_response, Response
 
 
+class Scan(Resource):
+    def get(self):
+        return make_response(rt('scan.html'))
+
+
 class VideoUpload(Resource):
     """上传视频"""
     def get(self):
