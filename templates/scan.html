@@ -7,110 +7,115 @@
 		<title>Hello H5+</title>
 		<script type="text/javascript" src="/static/js/common.js"></script>
 		<script type="text/javascript">
-var ws=null,wo=null;
-var scan=null,domready=false;
-// H5 plus事件处理
-function plusReady(){
-	if(ws||!window.plus||!domready){
-		return;
+var img = null;
+var blist = [];
+function scaned(t, r, f){
+	var d = new Date();
+	var h=d.getHours(),m=d.getMinutes(),s=d.getSeconds(),ms=d.getMilliseconds();
+	if(h < 10){ h='0'+h; }
+	if(m < 10){ m='0'+m; }
+	if(s < 10){ s='0'+s; }
+	if(ms < 10){ ms='00'+ms; }
+	else if(ms < 100){ ms='0'+ms; }
+	var ts = '['+h+':'+m+':'+s+'.'+ms+']';
+	var li=null,hl = document.getElementById('history');
+	if(blist.length > 0){
+		li = document.createElement('li');
+		li.className = 'ditem';
+		hl.insertBefore(li, hl.childNodes[0]);
+	} else{
+		li = document.getElementById('nohistory');
 	}
-	// 获取窗口对象
-	ws=plus.webview.currentWebview();
-	wo=ws.opener();
-	// 开始扫描
-	ws.addEventListener('show', function(){
-		scan=new plus.barcode.Barcode('bcid');
-	    scan.onmarked=onmarked;
-	    scan.start({conserve:true,filename:'_doc/barcode/'});
-	}, false);
-	// 显示页面并关闭等待框
-    ws.show('pop-in');
-    wo.evalJS('closeWaiting()');
+	li.id = blist.length;
+	var html = '['+h+':'+m+':'+s+'.'+ms+']'+'　　'+t+'码<div class="hdata">';
+	html += r;
+	html += '</div>';
+	li.innerHTML = html;
+	li.setAttribute('onclick', 'selected(id)');
+	blist[blist.length] = {type:t,result:r,file:f};
+	update(t, r, f);
 }
-if(window.plus){
-	plusReady();
-}else{
-	document.addEventListener('plusready', plusReady, false);
+function selected(id){
+	var h = blist[id];
+	update( h.type, h.result, h.file );
+	if(h.result.indexOf('http://')==0  || h.result.indexOf('https://')==0){
+		plus.nativeUI.confirm(h.result, function(i){
+			if(i.index == 0){
+				plus.runtime.openURL(h.result);
+			}
+		}, '', ['打开', '取消']);
+	} else{
+		plus.nativeUI.alert(h.result);
+	}
 }
-// 监听DOMContentLoaded事件
-document.addEventListener('DOMContentLoaded', function(){
-	domready=true;
-	plusReady();
-}, false);
-// 二维码扫描成功
-function onmarked(type, result, file){
-    switch(type){
-    	case plus.barcode.QR:
-    	type = 'QR';
-    	break;
-    	case plus.barcode.EAN13:
-    	type = 'EAN13';
-    	break;
-    	case plus.barcode.EAN8:
-    	type = 'EAN8';
-    	break;
-    	default:
-    	type = '其它'+type;
-    	break;
-    }
-    result = result.replace(/\r\n/g, '');
-    wo.evalJS("scaned('"+ type +"','"+ result +"','"+ file +"');");
-    back();
-}
-// 从相册中选择二维码图片 
-function scanPicture(){
-    plus.gallery.pick(function(path){
-	    plus.barcode.scan(path,onmarked,function(error){
-			plus.nativeUI.alert('无法识别此图片');
+function update(t, r, f){
+	outSet('扫描成功：');
+	outLine(t);
+	outLine(r);
+	outLine('\n图片地址：'+f);
+	if(!f || f=='null'){
+		img.src = '/static/img/barcode.png';
+	} else{
+		plus.io.resolveLocalFileSystemURL(f, function(entry){
+			img.src=entry.toLocalURL();
 		});
-    }, function(err){
-        console.log('Failed: '+err.message);
-    });
+		//img.src = 'http://localhost:13131/'+f;
+	}
+}
+function onempty(){
+	if(window.plus){
+		plus.nativeUI.alert('无扫描记录');
+	} else {
+		alert('无扫描记录');
+	}
+}
+function cleanHistroy(){
+	if(blist.length > 0){
+		var hl = document.getElementById('history');
+		hl.innerHTML = '<li id="nohistory" class="ditem" onclick="onempty();">无历史记录	</li>';
+	}
+	plus.io.resolveLocalFileSystemURL('_doc/barcode/', function(entry){
+		entry.removeRecursively(function(){
+			// Success
+		}, function(e){
+			//alert( "failed"+e.message );
+		});
+	});
 }
 		</script>
-		<link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8"/>
-		<style type="text/css">
-#bcid {
-	width: 100%;
-	position: absolute;
-	top: 0px;
-	bottom: 44px;
-	text-align: center;
-}
-.tip {
-	color: #FFFFFF;
-	font-weight: bold;
-	text-shadow: 0px -1px #103E5C;
-}
-footer {
-	width: 100%;
-	height: 44px;
-	position: absolute;
-	bottom: 0px;
-	line-height: 44px;
-	text-align: center;
-	color: #FFF;
-}
-.fbt {
-	width: 50%;
-	height: 100%;
-	background-color: #FFCC33;
-	float: left;
-}
-.fbt:active {
-  	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
-	box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
+		<link rel="stylesheet" href="/static/css/common.css" type="text/css" charset="utf-8"/>
+		<style type="text/css" media="screen">
+.hdata {
+	color: #e1673e;	
+	font-size: 14px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 		</style>
 	</head>
-	<body style="background-color: #000000;">
-		<div id="bcid">
-			<div style="height:40%"></div>
-			<p class="tip">...载入中...</p>
+	<body onload="img=document.getElementById('bimg')">
+		<header id="header">
+			<div class="nvbt iback" onclick="back()"></div>
+			<div class="nvtt">Barcode</div>
+			<div class="nvbt idoc" onclick="openDoc('Barcode Document','/doc/barcode.html')"></div>
+		</header>
+		<div id="dcontent" class="dcontent">
+			<br/>
+			<img style="width:40%" id="bimg" src="/static/img/barcode.png"/>
+			<br/>
+			<div class="button" onclick="clicked('barcode_scan.html',true,true)">扫一扫</div>
+			<div class="button" onclick="clicked('barcode_scan2.html',true,true)">扫一扫（自定义）</div>
+			<br/>
+			<ul id="history" class="dlist" style="text-align:left;">
+				<li id="nohistory" class="ditem" onclick="onempty()">无历史记录	</li>
+			</ul>
+			<br/>
+			<div class="button button-waring" onclick="cleanHistroy()">清空历史记录</div>
 		</div>
-		<footer>
-			<div class="fbt" onclick="back()">取　 消</div>
-			<div class="fbt" onclick="scanPicture()">从相册选择二维码</div>
-		</footer>
+		<div id="output">
+Barcode提供二维码扫描识别功能，支持调用摄像头即时扫描二维码，也可直接输入图片进行扫描识别。
+		</div>
 	</body>
+	<script type="text/javascript" src="/static/js/immersed.js" ></script>
 </html>

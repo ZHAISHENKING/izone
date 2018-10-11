@@ -29,3 +29,7 @@ docs.add_resource(UploadMerge, '/file/merge/', endpoint="upload_success")
 docs.add_resource(FileList, '/file/list/', endpoint="file_list")
 docs.add_resource(FileDwonload, '/file/download/<filename>/', endpoint="file_download")
 docs.add_resource(Scan, '/scan/')
+docs.add_resource(Scan1, '/scan1/', endpoint='scan1')
+docs.add_resource(Scan2, '/scan2/', endpoint='scan2')
+# wechat测试
+docs.add_resource(Weixin, '/weixin')
