@@ -3,6 +3,8 @@ from utils.common import *
 from .models import Video
 from admins import db
 from flask import render_template as rt, make_response, Response
+from local_settings import *
+import hashlib
 
 
 class Scan(Resource):
@@ -34,7 +36,7 @@ class Weixin(Resource):
         # 2. 将三个参数字符串拼接成一个字符串进行sha1加密
         temp = "".join(temp)
         # sig是我们计算出来的签名结果
-        sig = hashlib.sha1(temp).hexdigest()
+        sig = hashlib.sha1(temp.encode("utf8")).hexdigest()
 
         # 3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
         if sig == signature:
