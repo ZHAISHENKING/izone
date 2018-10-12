@@ -5,6 +5,7 @@ from admins import db
 from flask import render_template as rt, make_response, Response
 from local_settings import *
 import hashlib
+import xmltodict
 
 
 class Scan(Resource):
