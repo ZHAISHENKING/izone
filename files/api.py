@@ -4,8 +4,6 @@ from .models import Video
 from admins import db
 from flask import render_template as rt, make_response, Response
 from local_settings import *
-import hashlib
-import xmltodict
 
 
 class Scan(Resource):
@@ -21,33 +19,6 @@ class Scan1(Resource):
 class Scan2(Resource):
     def get(self):
         return make_response(rt('barcode_scan2.html'))
-
-
-class Weixin(Resource):
-    def get(self):
-        args = request.args
-        signature = args.get('signature')
-        timestamp = args.get('timestamp')
-        nonce = args.get('nonce')
-        echostr = args.get('echostr')
-
-        # 1. 将token、timestamp、nonce三个参数进行字典序排序
-        temp = [WECHAT_TOKEN, timestamp, nonce]
-        temp.sort()
-        # 2. 将三个参数字符串拼接成一个字符串进行sha1加密
-        temp = "".join(temp)
-        # sig是我们计算出来的签名结果
-        sig = hashlib.sha1(temp.encode("utf8")).hexdigest()
-
-        # 3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
-        if sig == signature:
-            # 根据请求方式.返回不同的内容 ,如果是get方式,代表是验证服务器有效性
-            # 如果POST方式,代表是微服务器转发给我们的消息
-
-            return echostr
-
-        else:
-            return falseReturn("error")
 
 
 class VideoUpload(Resource):
