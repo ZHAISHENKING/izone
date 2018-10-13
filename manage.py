@@ -8,7 +8,7 @@ from flask_migrate import Migrate, MigrateCommand
 from app import create_app
 from admins import db, AdminUser
 from pictures.models import *
-
+from users.models import Users
 
 app = create_app('dev')
 migrate = Migrate(app, db)

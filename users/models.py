@@ -2,23 +2,38 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import db
+from admins import db
 
 
 class Users(db.Model):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(250),  unique=True, nullable=False)
+    cover = db.Column(db.String(250))
     username = db.Column(db.String(250),  unique=True, nullable=False)
     password = db.Column(db.String(250))
     login_time = db.Column(db.Integer)
 
-    def __init__(self, username, password, email):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.email = email
 
-    def __str__(self):
+    def __repr__(self):
         return "Users(id='%s')" % self.id
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
 
     def set_password(self, password):
         return generate_password_hash(password)

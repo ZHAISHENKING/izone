@@ -12,6 +12,9 @@ from wtforms import form, fields, validators
 from flask_restful import Resource
 import flask_login as login
 from flask_admin.contrib.sqla import ModelView
+import redis
+r = redis.StrictRedis("localhost", 6379, db=0)
+
 
 db = SQLAlchemy()
 

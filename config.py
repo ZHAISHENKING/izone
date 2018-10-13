@@ -9,7 +9,7 @@ class Config(object):
     SID = 1234567
     SAFE_KEY = "abc"
     BASE_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-    SECRET_KEY = 'abcd'
+    SECRET_KEY = 'abchghghhnnbkd'
     REMEMBER_COOKIE_DURATION = datetime.timedelta(hours=3)
     BABEL_DEFAULT_LOCALE = 'zh_CN'
     DB_USER = 'root'

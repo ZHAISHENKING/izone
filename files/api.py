@@ -6,21 +6,6 @@ from flask import render_template as rt, make_response, Response
 from local_settings import *
 
 
-class Scan(Resource):
-    def get(self):
-        return make_response(rt('scan.html'))
-
-
-class Scan1(Resource):
-    def get(self):
-        return make_response(rt('barcode_scan.html'))
-
-
-class Scan2(Resource):
-    def get(self):
-        return make_response(rt('barcode_scan2.html'))
-
-
 class VideoUpload(Resource):
     """上传视频"""
     def get(self):

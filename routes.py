@@ -7,7 +7,8 @@ from flask import Blueprint
 from flask_restful import Api
 from pictures.api import *
 from files.api import *
-
+from users.api import *
+from users.code import Code
 # 实例化蓝图,路由前缀为/docs
 blue = Blueprint('api', __name__, url_prefix='/api')
 
@@ -28,3 +29,7 @@ docs.add_resource(UploadPart, '/file/upload/', endpoint="upload_part")
 docs.add_resource(UploadMerge, '/file/merge/', endpoint="upload_success")
 docs.add_resource(FileList, '/file/list/', endpoint="file_list")
 docs.add_resource(FileDwonload, '/file/download/<filename>/', endpoint="file_download")
+
+docs.add_resource(Login,'/user/login/', endpoint="user_login")
+docs.add_resource(Register, '/user/register/', endpoint="user_reg")
+docs.add_resource(Code, '/user/code/', endpoint="code")
