@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from admins import db
 
 
@@ -11,10 +10,11 @@ class Users(db.Model):
     cover = db.Column(db.String(250))
     username = db.Column(db.String(250),  unique=True, nullable=False)
     password = db.Column(db.String(250))
+    gate = db.Column(db.Integer, db.ForeignKey('gatekeeper.id'))
     login_time = db.Column(db.Integer)
 
     def __repr__(self):
-        return "Users(id='%s')" % self.id
+        return self.username
 
     @property
     def is_authenticated(self):

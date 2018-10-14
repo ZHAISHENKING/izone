@@ -1,5 +1,4 @@
 from admins import db
-from users.models import Users
 
 
 class Gatekeeper(db.Model):
@@ -10,8 +9,7 @@ class Gatekeeper(db.Model):
     description = db.Column(db.String(50))
     staff_required = db.Column(db.Boolean, default=False)
     percent = db.Column(db.Integer, default=0)
-    white_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    whitelist = db.relationship('Users', backref=db.backref('gatekeeper'), lazy=True)
+    whitelist = db.relationship('Users', backref='user', lazy=True)
 
     def check_user(self, user):
         """ Staff user can pass check anywhere.
