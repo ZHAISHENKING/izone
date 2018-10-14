@@ -18,6 +18,7 @@ class Upload(Resource):
             result.append(obj)
         return make_response(render_template("upload.html", category=result))
 
+    @jwt_required
     @catch_exception
     def post(self):
         up = UpFile()

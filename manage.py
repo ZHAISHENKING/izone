@@ -9,8 +9,8 @@ from app import create_app
 from admins import db, AdminUser
 from pictures.models import *
 from users.models import Users
-
-app = create_app('dev')
+app=create_app('dev')
+db.create_all(app=app)
 migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command("runserver",
@@ -18,7 +18,6 @@ manager.add_command("runserver",
                            port=5000,
                            ))
 manager.add_command("db", MigrateCommand)
-
 
 if __name__ == '__main__':
     manager.run()

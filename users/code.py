@@ -1,6 +1,6 @@
 from flask import request, session, jsonify, current_app
 from flask_restful import Resource
-from util.common import *
+from utils.common import *
 from admins import r
 import gvcode
 

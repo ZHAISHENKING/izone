@@ -2,8 +2,8 @@ from flask import request, session, current_app
 from flask_restful import Resource
 from .models import *
 from .code import verify
-from util.common import *
-from util.auth import Auth
+from utils.common import *
+from utils.auth import Auth
 from .form import LoginForm, RegistrationForm, login
 
 

@@ -126,3 +126,54 @@ class UpFile(object):
     # 调用系统通知
     def notify(title, text):
         os.system("osascript -e 'display notification \"{}\" with title \"{}\"'".format(text, title))
+
+
+# JWT验证
+def jwt_required(origin_func):
+    def wrapper(self, *args, **kwargs):
+        from flask import request
+        from utils.auth import Auth
+
+        # 请求头是否包含"jwt"
+        if "jwt" in request.headers:
+            is_vaild, info = Auth.decode_auth_token(request.headers['jwt'])
+            if is_vaild:
+                fn = origin_func(self, *args, **kwargs)
+                return fn
+            else:
+                return falseReturn(info)
+        else:
+            return VaildReturn("")
+    return wrapper
+
+
+# 通过JWt获取用户信息
+def get_user_info():
+    from flask import request
+    from utils.auth import Auth
+    is_vaild, info = Auth.decode_auth_token(request.headers['jwt'])
+    return info
+
+
+# 判断超级用户
+def super(origin_func):
+    def wrapper(self, *args, **kwargs):
+        from flask import request
+        from utils.auth import Auth
+        is_vaild, info = Auth.decode_auth_token(request.headers['jwt'])
+        if info["is_super"]:
+            fn = origin_func(self, *args, **kwargs)
+            return fn
+        else:
+            return falseReturn("无权访问")
+    return wrapper
+
+
+# 返回前端用户权限
+def user_authentication(data, user):
+    from gatekeeper.models import Gatekeeper
+    gates = Gatekeeper.query.all()
+
+    for i in gates:
+        data[i.name] = i.check_user(user)
+    return data

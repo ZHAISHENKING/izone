@@ -11,6 +11,7 @@ class VideoUpload(Resource):
     def get(self):
         return make_response(rt('up.html'))
 
+    @jwt_required
     @catch_exception
     def post(self):
         up = UpFile()

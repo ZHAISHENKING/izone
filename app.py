@@ -21,6 +21,7 @@ from pictures.view import *
 from users.view import *
 from files.view import *
 from flask_admin.contrib.fileadmin import FileAdmin
+from gatekeeper.view import GatekeeperView
 
 
 # models引用必须在 login_manager之后，不然会循环引用
@@ -32,6 +33,7 @@ admin.add_view(ModelView(Category, db.session, name="分类"))
 admin.add_view(VideoView(name="视频"))
 admin.add_view(FileAdmin('/data/upload/', name=u"文件"))
 admin.add_view(MyUserlView(name=u"用户"))
+admin.add_view(GatekeeperView(name=u"权限控制"))
 
 
 # 初始化app

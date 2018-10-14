@@ -13,10 +13,6 @@ class Users(db.Model):
     password = db.Column(db.String(250))
     login_time = db.Column(db.Integer)
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
     def __repr__(self):
         return "Users(id='%s')" % self.id
 
