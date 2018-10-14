@@ -44,8 +44,8 @@ class Auth():
         else:
             if Users.check_password(Users, userInfo.password, password):
                 login_time = int(time.time())
-                userInfo["login_time"] = login_time
-                userInfo.update()
+#                userInfo["login_time"] = login_time
+#                userInfo.update()
                 token = self.encode_auth_token(str(userInfo.id), login_time)
                 login.login_user(userInfo)
                 data = {
