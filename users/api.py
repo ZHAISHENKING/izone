@@ -14,7 +14,7 @@ class Register(Resource):
 
     @catch_exception
     def post(self):
-        data = request.json
+        data = request.values
 
         if data["username"]:
             if Users.query.filter_by(username=data["username"]).first():
@@ -44,7 +44,7 @@ class Login(Resource):
 
     @catch_exception
     def post(self):
-        data = request.get_json()
+        data = request.values
         username = data["username"]
         password = data["password"]
         if not username or not password:
