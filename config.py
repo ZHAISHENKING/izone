@@ -14,7 +14,7 @@ class Config(object):
     BABEL_DEFAULT_LOCALE = 'zh_CN'
     DB_USER = 'root'
     DB_PASSWORD = SQLPWD
-    DB_HOST = 'localhost'
+    DB_HOST = 'oj.s001.xin'
     DB_DB = 'izone'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql://' + DB_USER + ':' + DB_PASSWORD + '@' + DB_HOST + '/' + DB_DB
