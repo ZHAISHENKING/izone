@@ -33,3 +33,5 @@ python manage.py runserver
 - 记录来访人数
 - 留言板
 - 用户登录注册头像，个人信息补全
+
+
