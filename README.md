@@ -28,3 +28,10 @@ python manage.py db upgrade
 # 如果以上都没有问题
 python manage.py runserver
 ```
+
+### 项目之后会涉及的开发需求
+- 记录来访人数
+- 留言板
+- 用户登录注册头像，个人信息补全
+
+
