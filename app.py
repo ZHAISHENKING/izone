@@ -82,10 +82,6 @@ def create_app(config_name):
         bp = import_string(bp_name)
         app.register_blueprint(bp)
 
-    @app.route('/', defaults={'path': ''})
-    @app.route('/<path:path>')
-    def index(path):
-        return render_template('index.html')
     # 跨域
     CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
     return app
