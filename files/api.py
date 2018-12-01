@@ -2,7 +2,7 @@ from flask_restful import Resource
 from utils.common import *
 from .models import Video
 from admins import db
-from flask import render_template as rt, make_response, Response
+from flask import render_template as rt, make_response, Response, send_from_directory
 from local_settings import *
 
 
@@ -100,12 +100,4 @@ class FileList(Resource):
 
 class FileDwonload(Resource):
     def get(self, filename):
-        def send_chunk():  # 流式读取
-            store_path = '/data/upload/%s' % filename
-            with open(store_path, 'rb') as target_file:
-                while True:
-                    chunk = target_file.read(20 * 1024 * 1024)
-                    if not chunk:
-                        break
-                    yield chunk
-        return Response(send_chunk(), content_type='application/octet-stream')
+        return send_from_directory("/data/upload", filename)
