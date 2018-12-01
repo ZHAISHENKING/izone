@@ -98,6 +98,20 @@ class FileList(Resource):
         return make_response(rt('./list.html', files=files))
 
 
-class FileDwonload(Resource):
+class FilePlayer(Resource):
     def get(self, filename):
         return send_from_directory("/data/upload", filename)
+
+
+class FileDownload(Resource):
+    def get(self, filename):
+        def send_chunk():  # 流式读取	        return send_from_directory("/data/upload", filename)
+            store_path = '/data/upload/%s' % filename
+            with open(store_path, 'rb') as target_file:
+                while True:
+                    chunk = target_file.read(20 * 1024 * 1024)
+                    if not chunk:
+                        break
+                    yield chunk
+
+        return Response(send_chunk(), content_type='application/octet-stream')
