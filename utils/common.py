@@ -115,7 +115,7 @@ class UpFile(object):
         key = self.random_name() + "." + sfx
         q = qiniu.Auth(QINIU_AK, QINIU_SK)
         token = q.upload_token(QINIU_BUCKET, key, 3600)
-        ret, info = qiniu.put_file(token, key, fn)
+        ret, info = qiniu.put_data(token, key, fn)
         if (ret is not None) and ret['key'] == key and ret['hash'] == qiniu.etag(fn):
             return QINIU_DOMAIN + key
         else:

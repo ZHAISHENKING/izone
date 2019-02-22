@@ -24,9 +24,10 @@ class Upload(Resource):
         data = request.values
         f = request.files["image"]
         filename = secure_filename(f.filename)
-        f.save(filename)
         mime = filename.rsplit(".")[1]
-        qiniu_url = up.upload_img(filename, mime)
+        with open(f, "rb") as file:
+            qiniu_url = up.upload_img(file, mime)
+
         if qiniu_url:
             pic = Picture(
                 image_url=qiniu_url,
