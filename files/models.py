@@ -15,3 +15,13 @@ class Video(db.Model):
 
     def __repr__(self):
         return "<Video %r>" % self.id
+
+
+class Staff(db.Model):
+    """测试model,可用此model创建数据来测试sqlchemy的聚合、查询等方法"""
+    __tablename__ = "staff"
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    name = db.Column(db.String(100))
+    score = db.Column(db.Integer, default=True)
+    def __repr__(self):
+        return "<Staff %r>" % self.id

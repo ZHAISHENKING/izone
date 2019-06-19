@@ -4,6 +4,16 @@ from pictures.models import Picture, Category
 from admins import db
 from flask import make_response, render_template
 
+from qiniu import Auth, put_data
+# 需要填写你的 Access Key 和 Secret Key
+access_key = QINIU_AK
+secret_key = QINIU_SK
+# 构建鉴权对象
+q = Auth(access_key, secret_key)
+# 要上传的空间
+bucket_name = QINIU_BUCKET
+domain_prefix = QINIU_DOMAIN
+
 
 class Upload(Resource):
     """上传图片"""
@@ -28,17 +38,17 @@ class Upload(Resource):
         with open(f, "rb") as file:
             qiniu_url = up.upload_img(file, mime)
 
-        if qiniu_url:
-            pic = Picture(
-                image_url=qiniu_url,
-                desc=data["desc"],
-                category=Category.query.filter_by(id=int(data["category"])).first()
-            )
-            db.session.add(pic)
-            db.session.commit()
-            return trueReturn(qiniu_url)
-        else:
-            return falseReturn("上传失败")
+        # if qiniu_url:
+        #     pic = Picture(
+        #         image_url=qiniu_url,
+        #         desc=data["desc"],
+        #         category=Category.query.filter_by(id=int(data["category"])).first()
+        #     )
+        #     db.session.add(pic)
+        #     db.session.commit()
+        #     return trueReturn(qiniu_url)
+        # else:
+        #     return falseReturn("上传失败")
 
 
 class GetAllImage(Resource):
@@ -90,3 +100,15 @@ class GetPic(Resource):
             }
             result.append(obj)
         return trueReturn(result)
+
+
+def qiniu_upload_file(source_file, save_file_name):
+    # 生成上传 Token，可以指定过期时间等
+    token = q.upload_token(bucket_name, save_file_name)
+
+    ret, info = put_data(token, save_file_name, source_file.stream)
+
+    print(type(info.status_code), info)
+    if info.status_code == 200:
+        return domain_prefix + save_file_name
+    return None
