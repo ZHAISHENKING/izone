@@ -45,6 +45,8 @@ def MongoReturn():
 # 错误判断
 def catch_exception(origin_func):
     def wrapper(self, *args, **kwargs):
+        import sys
+        import traceback
         from flask import current_app
         from sqlalchemy.exc import (
             SQLAlchemyError,
@@ -57,25 +59,26 @@ def catch_exception(origin_func):
         try:
             u = origin_func(self, *args, **kwargs)
             return u
-        except AttributeError as e:
-            current_app.logger.error(e)
-            return "参数错误"
-        except (
-                SQLAlchemyError,
-                NoSuchColumnError,
-                NoSuchModuleError,
-                NoForeignKeysError,
-                NoReferencedColumnError,
-                DisconnectionError
-        ) as e:
-            current_app.logger.error(e)
-            return MongoReturn()
-        except TypeError as e:
-            current_app.logger.error(e)
-            return falseReturn("TypeError")
+
         except Exception as e:
-            current_app.logger.error(e)
-            return falseReturn("Error")
+            _, _, exc_tb = sys.exc_info()
+            if request.json:
+                param = dict(request.json)
+            elif request.args:
+                param = dict(request.args)
+            else:
+                param = ""
+            result = "报错接口: %s\n报错方法: %s\n报错原因: %s\n报错参数: %s\n" % (
+                request.path,
+                origin_func.__name__,
+                repr(e),
+                param
+            )
+            for k, v in enumerate(traceback.extract_tb(exc_tb)):
+                if k != 0:
+                    result += "错误定位%d: %s\n" % (k, str(v))
+            current_app.logger.error(result)
+            return falseReturn(repr(e))
 
     return wrapper
 
