@@ -23,5 +23,7 @@ class Staff(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     name = db.Column(db.String(100))
     score = db.Column(db.Integer, default=True)
+    depart = db.ARRAY(db.String(100))
+
     def __repr__(self):
         return "<Staff %r>" % self.id
