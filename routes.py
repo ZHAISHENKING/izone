@@ -5,9 +5,8 @@
 from admins import Index, LogoutView, LoginView
 from flask import Blueprint
 from flask_restful import Api
-from pictures.api import *
-from files.api import *
 from users.api import *
+from v1.api import *
 from users.code import Code
 # 实例化蓝图,路由前缀为/docs
 blue = Blueprint('api', __name__, url_prefix='/api')

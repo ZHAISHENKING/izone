@@ -11,9 +11,6 @@ class MyUserlView(ModelView):
         "username": u"姓名",
         "login_time": u"上次登录"
     }
-    # column_searchable_list = (
-    #     Users.username
-    # )
 
     def __init__(self, **kwargs):
         super(MyUserlView, self).__init__(Users, db.session, **kwargs)

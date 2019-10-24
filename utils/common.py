@@ -174,7 +174,7 @@ def super(origin_func):
 
 # 返回前端用户权限
 def user_authentication(data, user):
-    from gatekeeper.models import Gatekeeper
+    from v1.models import Gatekeeper
     gates = Gatekeeper.query.all()
 
     for i in gates:

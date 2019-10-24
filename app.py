@@ -17,12 +17,9 @@ from config import config
 from admins import admin, login, AdminUser, db, ModelView
 from flask_babelex import Babel
 import logging
-from pictures.view import *
-from users.view import *
-from files.view import *
+from v1.views import *
+from users.view import MyUserlView
 from flask_admin.contrib.fileadmin import FileAdmin
-from gatekeeper.view import GatekeeperView
-
 
 # models引用必须在 login_manager之后，不然会循环引用
 blueprints = ['routes:blue']
