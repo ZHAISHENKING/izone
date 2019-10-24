@@ -1,8 +1,7 @@
-from .models import Picture, Category
+from .models import Picture, Category, Video
 from flask import render_template
 from flask_restful import Resource
 from utils.common import *
-from .models import Video
 from admins import db
 from flask import render_template as rt, make_response, Response, send_from_directory
 from local_settings import *
@@ -54,8 +53,6 @@ class GetAllImage(Resource):
     def get(self):
         pic = Picture.query.all()
         result = []
-        if not pic:
-            return trueReturn([])
         for i in pic:
             result.append({
                 "id": i.id, "image_url": i.image_url,
@@ -82,7 +79,7 @@ class GetAllCategory(Resource):
 
 
 class GetPic(Resource):
-    """根据id获取图片"""
+    """根据分类id获取图片"""
     @catch_exception
     def post(self):
         id = request.values["id"]

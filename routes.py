@@ -6,7 +6,7 @@ from admins import Index, LogoutView, LoginView
 from flask import Blueprint
 from flask_restful import Api
 from users.api import *
-from v1.api import *
+from v2.api import *
 from users.code import Code
 # 实例化蓝图,路由前缀为/docs
 blue = Blueprint('api', __name__, url_prefix='/api')
@@ -32,3 +32,5 @@ docs.add_resource(FileDownload, '/file/download/<filename>/', endpoint="file_dow
 docs.add_resource(Login,'/user/login/', endpoint="user_login")
 docs.add_resource(Register, '/user/register/', endpoint="user_reg")
 docs.add_resource(Code, '/user/code/', endpoint="code")
+
+docs.add_resource(GetPicByCate, '/img', endpoint="img")
