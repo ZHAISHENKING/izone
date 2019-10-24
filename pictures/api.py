@@ -76,9 +76,20 @@ class GetAllCategory(Resource):
         cate = Category.query.all()
         result = []
         for i in cate:
+            pic = Picture.query.filter_by(category=i).all()
+            pic_list = []
+            for j in pic:
+                o = {
+                    "id": j.id,
+                    "image_url": j.image_url,
+                    "desc": j.desc
+                }
+                pic_list.append(o)
             obj = {
                 "id": i.id,
-                "title": i.title
+                "title": i.title,
+                "desc": i.desc,
+                "pic": pic_list
             }
             result.append(obj)
         return trueReturn(result)

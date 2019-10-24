@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 from admins import db
+from datetime import datetime
 
 
 class Users(db.Model):
@@ -12,6 +13,8 @@ class Users(db.Model):
     password = db.Column(db.String(250))
     gate = db.Column(db.Integer, db.ForeignKey('gatekeeper.id'))
     login_time = db.Column(db.Integer)
+    begin_at = db.Column(db.Date, default=datetime.now)
+    end_at = db.Column(db.Date, default=datetime.now)
 
     def __repr__(self):
         return self.username
