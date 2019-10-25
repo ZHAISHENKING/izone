@@ -115,15 +115,20 @@ class UpFile(object):
 
     # 上传至七牛云
     def upload_img(self, fn, sfx):
-        key = self.random_name() + "." + sfx
+        key = self.random_name() + 'png'
+        if sfx:
+            key = self.random_name() + "." + sfx
         q = qiniu.Auth(QINIU_AK, QINIU_SK)
         token = q.upload_token(QINIU_BUCKET, key, 3600)
         ret, info = qiniu.put_data(token, key, fn)
-        if (ret is not None) and ret['key'] == key and ret['hash'] == qiniu.etag(fn):
+        if info.status_code == 200:
+            # 表示上传成功, 返回文件名
             return QINIU_DOMAIN + key
         else:
-            self.notify("qiniu-fileup", "上传七牛云失败")
+            # 上传失败
             return False
+
+
 
     @staticmethod
     # 调用系统通知

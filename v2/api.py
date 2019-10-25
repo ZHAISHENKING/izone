@@ -39,15 +39,14 @@ class UploadV2(Resource):
         f = request.files["file"]
         filename = secure_filename(f.filename)
         mime = filename.rsplit(".")[1]
-        with open(f, "rb") as file:
-            qiniu_url = up.upload_img(file, mime)
-            if qiniu_url:
-                pic = Picture(
-                    image_url=qiniu_url,
-                    category=Category.query.filter_by(id=int(data["id"])).first()
-                )
-                db.session.add(pic)
-                db.session.commit()
-                return trueReturn(qiniu_url)
-            else:
-                return falseReturn("上传失败")
+        qiniu_url = up.upload_img(f.read(), mime)
+        if qiniu_url:
+            pic = Picture(
+                image_url=qiniu_url,
+                category=Category.query.filter_by(id=int(data["id"])).first()
+            )
+            db.session.add(pic)
+            db.session.commit()
+            return trueReturn(qiniu_url)
+        else:
+            return falseReturn("上传失败")
