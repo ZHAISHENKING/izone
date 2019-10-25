@@ -35,4 +35,4 @@ docs.add_resource(Code, '/user/code/', endpoint="code")
 
 docs.add_resource(GetPicByCate, '/img', endpoint="img")
 docs.add_resource(GetUploadToken, '/token', endpoint='token')
-docs.add_resource(UploadV2, '/upload', endpoint="upload")
+docs.add_resource(UploadV2, '/upload/img', endpoint="upload_img")
