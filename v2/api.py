@@ -18,3 +18,10 @@ class GetPicByCate(Resource):
             })
         result = {"id": id, "pic": _list, "desc": c.desc, "title": c.title}
         return trueReturn(result)
+
+
+class GetUploadToken(Resource):
+    """获取七牛token"""
+    def post(self):
+        token = q.upload_token(bucket_name)
+        return trueReturn(token)
