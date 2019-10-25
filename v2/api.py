@@ -25,3 +25,29 @@ class GetUploadToken(Resource):
     def post(self):
         token = q.upload_token(bucket_name)
         return trueReturn(token)
+
+
+class UploadV2(Resource):
+    """
+    @:param id: category id
+    @:param file: image
+    """
+    @catch_exception
+    def post(self):
+        up = UpFile()
+        data = request.values
+        f = request.files["file"]
+        filename = secure_filename(f.filename)
+        mime = filename.rsplit(".")[1]
+        with open(f, "rb") as file:
+            qiniu_url = up.upload_img(file, mime)
+            if qiniu_url:
+                pic = Picture(
+                    image_url=qiniu_url,
+                    category=Category.query.filter_by(id=int(data["id"])).first()
+                )
+                db.session.add(pic)
+                db.session.commit()
+                return trueReturn(qiniu_url)
+            else:
+                return falseReturn("上传失败")
