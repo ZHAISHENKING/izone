@@ -72,3 +72,17 @@ class EditCategory(Resource):
         db.session.add(category)
         db.session.commit()
         return trueReturn("编辑成功")
+
+
+class DeleteImg(Resource):
+    """
+    删除图片
+    @:param: ids: picture id array
+    """
+    @catch_exception
+    def post(self):
+        data = request.values
+        pic = Picture.query.filter(Picture.id.in_(data["ids"])).all()
+        db.session.delete(pic)
+        db.session.commit()
+        return trueReturn("删除成功")
