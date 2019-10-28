@@ -38,7 +38,10 @@ class UploadV2(Resource):
         data = request.values
         f = request.files["file"]
         filename = secure_filename(f.filename)
-        mime = filename.rsplit(".")[1]
+        try:
+            mime = filename.rsplit(".")[1]
+        except Exception:
+            mime = None
         qiniu_url = up.upload_img(f.read(), mime)
         if qiniu_url:
             pic = Picture(
