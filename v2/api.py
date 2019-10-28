@@ -29,6 +29,7 @@ class GetUploadToken(Resource):
 
 class UploadV2(Resource):
     """
+    上传图片
     @:param id: category id
     @:param file: image
     """
@@ -53,3 +54,21 @@ class UploadV2(Resource):
             return trueReturn(qiniu_url)
         else:
             return falseReturn("上传失败")
+
+
+class EditCategory(Resource):
+    """
+    编辑分类
+    @:param: id: category id
+    @:param: title: new category name
+    """
+    @catch_exception
+    def post(self):
+        data = request.values
+        category = Category.query.filter_by(id=int(data["id"])).first()
+        if not category:
+            return falseReturn("分类不存在")
+        category.title = data["title"]
+        db.session.add(category)
+        db.session.commit()
+        return trueReturn("编辑成功")
