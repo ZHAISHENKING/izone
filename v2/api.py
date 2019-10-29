@@ -82,7 +82,9 @@ class DeleteImg(Resource):
     @catch_exception
     def post(self):
         data = request.values
-        pic = Picture.query.filter(Picture.id.in_(data["ids"])).all()
+        ids = data["ids"].split(',')
+        ids = [int(i) for i in ids]
+        pic = Picture.query.filter(Picture.id.in_(ids)).all()
         db.session.delete(pic)
         db.session.commit()
         return trueReturn("删除成功")
