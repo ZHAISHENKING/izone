@@ -48,14 +48,6 @@ def catch_exception(origin_func):
         import sys
         import traceback
         from flask import current_app
-        from sqlalchemy.exc import (
-            SQLAlchemyError,
-            NoSuchColumnError,
-            NoSuchModuleError,
-            NoForeignKeysError,
-            NoReferencedColumnError,
-            DisconnectionError
-        )
         try:
             u = origin_func(self, *args, **kwargs)
             return u
@@ -66,8 +58,10 @@ def catch_exception(origin_func):
                 param = dict(request.json)
             elif request.args:
                 param = dict(request.args)
+            elif request.values:
+                param = dict(request.values)
             else:
-                param = ""
+                param = ''
             result = "报错接口: %s\n报错方法: %s\n报错原因: %s\n报错参数: %s\n" % (
                 request.path,
                 origin_func.__name__,
@@ -79,7 +73,6 @@ def catch_exception(origin_func):
                     result += "错误定位%d: %s\n" % (k, str(v))
             current_app.logger.error(result)
             return falseReturn(repr(e))
-
     return wrapper
 
 
