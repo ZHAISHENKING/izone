@@ -84,7 +84,6 @@ class DeleteImg(Resource):
         data = request.values
         ids = data["ids"].split(',')
         ids = [int(i) for i in ids]
-        pic = Picture.query.filter(Picture.id.in_(ids)).all()
-        db.session.delete(pic)
+        Picture.query.filter(Picture.id.in_(ids)).delete(synchronize_session=False)
         db.session.commit()
         return trueReturn("删除成功")
