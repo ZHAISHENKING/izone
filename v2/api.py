@@ -81,7 +81,7 @@ class DeleteImg(Resource):
     """
     @catch_exception
     def post(self):
-        data = request.json
+        data = request.values
         ids = data["ids"].split(',')
         ids = [int(i) for i in ids]
         pic = Picture.query.filter(Picture.id.in_(ids)).all()
