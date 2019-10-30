@@ -12,9 +12,9 @@ class Picture(db.Model):
     image_url = db.Column(db.String(100))
     desc = db.Column(db.String(80))
     create_at = db.Column(db.Date, default=datetime.now)
-    # 分类外键
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    category = db.relationship("Category", backref=db.backref('picture'))
+    # 相册外键
+    album_id = db.Column(db.Integer, db.ForeignKey('album.id'))
+    album = db.relationship('Album', backref=db.backref('picture'))
 
     def __repr__(self):
         return "<Picture %r>" % self.id
@@ -35,16 +35,31 @@ class Video(db.Model):
     def __repr__(self):
         return "<Video %r>" % self.id
 
+import enum
 
-class Category(db.Model):
-    """分类"""
-    __tablename__ = "category"
+cate_choice = (
+    (0, '最爱'),
+    (1, "风景"),
+    (2, "人物"),
+    (3, "动物"),
+    (4, "游记"),
+    (5, "卡通"),
+    (6, "生活"),
+    (7, "其他")
+)
+
+
+class Album(db.Model):
+    """相册"""
+    __tablename__ = "album"
     id = db.Column(db.Integer, unique=True, primary_key=True)
     title = db.Column(db.String(30))
     desc = db.Column(db.String(250))
+    cate = db.Column(db.Enum('最爱','风景', '人物', '动物', '游记', '卡通', '生活', '其他'), server_default='最爱', nullable=False)
+    create_at = db.Column(db.Date, default=datetime.now)
 
     def __repr__(self):
-        return "<Category %r>" % self.title
+        return "<Album %r>" % self.title
 
 
 class Gatekeeper(db.Model):

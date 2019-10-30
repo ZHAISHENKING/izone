@@ -1,4 +1,4 @@
-from .models import Picture, Category, Video
+from .models import Picture, Album, Video
 from flask import render_template
 from flask_restful import Resource
 from utils.common import *
@@ -19,7 +19,7 @@ domain_prefix = QINIU_DOMAIN
 class Upload(Resource):
     """上传图片"""
     def get(self):
-        cate = Category.query.all()
+        cate = Album.query.all()
         result = []
         for i in cate:
             result.append({"id": i.id, "title": i.title})
@@ -38,7 +38,7 @@ class Upload(Resource):
                 pic = Picture(
                     image_url=qiniu_url,
                     desc=data["desc"],
-                    category=Category.query.filter_by(id=int(data["category"])).first()
+                    album=Album.query.filter_by(id=int(data["category"])).first()
                 )
                 db.session.add(pic)
                 db.session.commit()
@@ -65,7 +65,7 @@ class GetAllCategory(Resource):
     """获取所有分类"""
     @catch_exception
     def get(self):
-        cate = Category.query.all()
+        cate = Album.query.all()
         result = []
         for i in cate:
             pic = Picture.query.filter_by(category=i).all()
@@ -83,7 +83,7 @@ class GetPic(Resource):
     @catch_exception
     def post(self):
         id = request.values["id"]
-        c = Category.query.filter_by(id=int(id)).first()
+        c = Album.query.filter_by(id=int(id)).first()
         pic = Picture.query.filter_by(category=c).all()
         result = []
         for i in pic:

@@ -26,7 +26,7 @@ blueprints = ['routes:blue']
 
 # model视图注册
 admin.add_view(PicView(name=u"图片"))
-admin.add_view(ModelView(Category, db.session, name="分类"))
+admin.add_view(ModelView(Album, db.session, name="相册"))
 admin.add_view(VideoView(name="视频"))
 admin.add_view(FileAdmin('/data/upload/', name=u"文件"))
 admin.add_view(MyUserlView(name=u"用户"))

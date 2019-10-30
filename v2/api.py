@@ -8,7 +8,7 @@ class GetPicByCate(Resource):
     """通过分类id获取图片"""
     def post(self):
         id = request.values["id"]
-        c = Category.query.filter_by(id=int(id)).first()
+        c = Album.query.filter_by(id=int(id)).first()
         pic = Picture.query.filter_by(category=c).all()
         _list = []
         for i in pic:
@@ -47,7 +47,7 @@ class UploadV2(Resource):
         if qiniu_url:
             pic = Picture(
                 image_url=qiniu_url,
-                category=Category.query.filter_by(id=int(data["id"])).first()
+                album=Album.query.filter_by(id=int(data["id"])).first()
             )
             db.session.add(pic)
             db.session.commit()
@@ -65,7 +65,7 @@ class EditCategory(Resource):
     @catch_exception
     def post(self):
         data = request.values
-        category = Category.query.filter_by(id=int(data["id"])).first()
+        category = Album.query.filter_by(id=int(data["id"])).first()
         if not category:
             return falseReturn("分类不存在")
         category.title = data["title"]
@@ -87,3 +87,21 @@ class DeleteImg(Resource):
         Picture.query.filter(Picture.id.in_(ids)).delete(synchronize_session=False)
         db.session.commit()
         return trueReturn("删除成功")
+
+
+class CreateAlbum(Resource):
+    """
+    创建相册
+    @:param: title: 相册名
+    @:param: desc: 相册描述
+    """
+    @catch_exception
+    def post(self):
+        data = request.values
+        cate = Album(
+            title=data['title'],
+            desc=data["desc"]
+        )
+        db.session.add(cate)
+        db.session.commit()
+        return trueReturn(cate.id)
