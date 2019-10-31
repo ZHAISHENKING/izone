@@ -25,7 +25,8 @@ class GetPicByCate(Resource):
         for i in pic:
             _list.append({
                 "id": i.id, "image_url": i.image_url,
-                "desc": i.desc, "album": i.album.id
+                "desc": i.desc, "album": i.album.id,
+                "create_at": str(i.create_at)
             })
         result = {"id": id, "pic": _list,
                   "desc": c.desc, "title": c.title,
@@ -81,7 +82,10 @@ class EditCategory(Resource):
         category = Album.query.filter_by(id=int(data["id"])).first()
         if not category:
             return falseReturn("分类不存在")
-        category.title = data["title"]
+        if 'title' in data:
+            category.title = data.get('title')
+        if 'desc' in data:
+            category.desc = data.get("desc")
         db.session.add(category)
         db.session.commit()
         return trueReturn("编辑成功")
@@ -136,3 +140,29 @@ class AuthToken(Resource):
             return trueReturn(info)
         else:
             return falseReturn(info)
+
+
+class UploadCover(Resource):
+    """
+    上传头像
+    @:param: file
+    """
+    @catch_exception
+    @jwt_required
+    def post(self):
+        up = UpFile()
+        f = request.files["file"]
+        filename = secure_filename(f.filename)
+        try:
+            mime = filename.rsplit(".")[1]
+        except Exception:
+            mime = None
+        qiniu_url = up.upload_img(f.read(), mime)
+        user = get_user()
+        if qiniu_url:
+            user.cover = qiniu_url
+            db.session.add(user)
+            db.session.commit()
+            return trueReturn(qiniu_url)
+        else:
+            return falseReturn("上传失败")

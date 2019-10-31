@@ -121,8 +121,6 @@ class UpFile(object):
             # 上传失败
             return False
 
-
-
     @staticmethod
     # 调用系统通知
     def notify(title, text):
@@ -154,6 +152,15 @@ def get_user_info():
     from utils.auth import Auth
     is_vaild, info = Auth.decode_auth_token(request.headers['jwt'])
     return info
+
+
+def get_user():
+    from flask import request
+    from users.models import Users
+    from utils.auth import Auth
+    is_vaild, info = Auth.decode_auth_token(request.headers['jwt'])
+    user = Users.query.filter_by(id=info["id"]).first()
+    return user
 
 
 # 判断超级用户
