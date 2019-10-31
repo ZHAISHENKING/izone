@@ -73,11 +73,12 @@ class Auth():
             data = jwt.decode(auth_token, current_app.config["SECRET_KEY"], options={'verify_exp': False})
             user = {}
             id = data["data"]["id"]
-            user = Users.query.get(id=id)
+            user = Users.query.filter_by(id=int(id)).first()
             if user:
                 userInfo = {
-                    "id": user["id"],
-                    "username": user["username"]
+                    "id": user.id,
+                    "username": user.username,
+                    "cover": user.cover
                 }
                 # userInfo = common.user_authentication(userInfo, user)
             else:

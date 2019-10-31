@@ -23,7 +23,7 @@ class Upload(Resource):
         result = []
         for i in cate:
             result.append({"id": i.id, "title": i.title})
-        return make_response(render_template("upload.html", category=result))
+        return make_response(render_template("upload.html", album=result))
 
     @catch_exception
     def post(self):
@@ -38,7 +38,7 @@ class Upload(Resource):
                 pic = Picture(
                     image_url=qiniu_url,
                     desc=data["desc"],
-                    album=Album.query.filter_by(id=int(data["category"])).first()
+                    album=Album.query.filter_by(id=int(data["album"])).first()
                 )
                 db.session.add(pic)
                 db.session.commit()
@@ -68,12 +68,14 @@ class GetAllCategory(Resource):
         cate = Album.query.all()
         result = []
         for i in cate:
-            pic = Picture.query.filter_by(category=i).all()
+            pic = Picture.query.filter_by(album=i).all()
             pic_list = []
             for j in pic:
                 pic_list.append({"id": j.id,"image_url": j.image_url, "desc": j.desc})
             result.append({
-                "id": i.id, "title": i.title, "desc": i.desc, "pic": pic_list
+                "id": i.id, "title": i.title,
+                "desc": i.desc, "pic": pic_list,
+                'cover': i.cover, 'cate': i.cate
             })
         return trueReturn(result)
 
@@ -84,12 +86,12 @@ class GetPic(Resource):
     def post(self):
         id = request.values["id"]
         c = Album.query.filter_by(id=int(id)).first()
-        pic = Picture.query.filter_by(category=c).all()
+        pic = Picture.query.filter_by(album=c).all()
         result = []
         for i in pic:
             result.append({
                 "id": i.id, "image_url": i.image_url,
-                "desc": i.desc, "category": i.category.id
+                "desc": i.desc, "album": i.album.id
             })
         return trueReturn(result)
 

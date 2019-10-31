@@ -35,19 +35,6 @@ class Video(db.Model):
     def __repr__(self):
         return "<Video %r>" % self.id
 
-import enum
-
-cate_choice = (
-    (0, '最爱'),
-    (1, "风景"),
-    (2, "人物"),
-    (3, "动物"),
-    (4, "游记"),
-    (5, "卡通"),
-    (6, "生活"),
-    (7, "其他")
-)
-
 
 class Album(db.Model):
     """相册"""
@@ -55,7 +42,10 @@ class Album(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     title = db.Column(db.String(30))
     desc = db.Column(db.String(250))
-    cate = db.Column(db.Enum('最爱','风景', '人物', '动物', '游记', '卡通', '生活', '其他'), server_default='最爱', nullable=False)
+    cate = db.Column(db.Enum(
+        '最爱', '风景', '人物', '动物', '游记', '卡通', '生活', '其他'
+    ), server_default='最爱', nullable=False)
+    cover = db.Column(db.String(250))
     create_at = db.Column(db.Date, default=datetime.now)
 
     def __repr__(self):

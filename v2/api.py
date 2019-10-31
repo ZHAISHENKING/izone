@@ -3,20 +3,33 @@
 """
 from v1.api import *
 
+cate_choice = dict({
+    (0, '最爱'),
+    (1, "风景"),
+    (2, "人物"),
+    (3, "动物"),
+    (4, "游记"),
+    (5, "卡通"),
+    (6, "生活"),
+    (7, "其他")
+})
+
 
 class GetPicByCate(Resource):
     """通过分类id获取图片"""
     def post(self):
         id = request.values["id"]
         c = Album.query.filter_by(id=int(id)).first()
-        pic = Picture.query.filter_by(category=c).all()
+        pic = Picture.query.filter_by(album=c).all()
         _list = []
         for i in pic:
             _list.append({
                 "id": i.id, "image_url": i.image_url,
-                "desc": i.desc, "category": i.category.id
+                "desc": i.desc, "album": i.album.id
             })
-        result = {"id": id, "pic": _list, "desc": c.desc, "title": c.title}
+        result = {"id": id, "pic": _list,
+                  "desc": c.desc, "title": c.title,
+                  'cover': c.cover, 'cate': c.cate}
         return trueReturn(result)
 
 
@@ -58,7 +71,7 @@ class UploadV2(Resource):
 
 class EditCategory(Resource):
     """
-    编辑分类
+    编辑相册
     @:param: id: category id
     @:param: title: new category name
     """
@@ -98,10 +111,28 @@ class CreateAlbum(Resource):
     @catch_exception
     def post(self):
         data = request.values
-        cate = Album(
+        album = Album(
             title=data['title'],
-            desc=data["desc"]
+            desc=data["desc"],
+            cate=data["cate"]
         )
-        db.session.add(cate)
+        db.session.add(album)
         db.session.commit()
-        return trueReturn(cate.id)
+        return trueReturn(album.id)
+
+
+class AuthToken(Resource):
+    """
+    鉴权接口
+    @:param: token
+    """
+    @catch_exception
+    def post(self):
+        from utils.auth import Auth
+        data = request.values
+        token = data.get("token")
+        auth, info = Auth().decode_auth_token(token)
+        if auth:
+            return trueReturn(info)
+        else:
+            return falseReturn(info)

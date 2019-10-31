@@ -20,19 +20,29 @@ class Register(Resource):
             if Users.query.filter_by(username=data["username"]).first():
                 return falseReturn("用户已存在")
             else:
-                if verify(data):
-                    user = Users(
-                        username=data["username"],
-                        password=Users.set_password(Users, data["password"])
-                    )
-                    db.session.add(user)
-                    db.session.commit()
-                    if user.id:
-                        return Auth.authenticate(Auth, data["username"], data["password"])
-                    else:
-                        return falseReturn("注册失败")
+                user = Users(
+                    username=data["username"],
+                    password=Users.set_password(Users, data["password"])
+                )
+                db.session.add(user)
+                db.session.commit()
+                if user.id:
+                    return Auth.authenticate(Auth, data["username"], data["password"])
                 else:
-                    return falseReturn("验证码错误")
+                    return falseReturn("注册失败")
+                # if verify(data):
+                #     user = Users(
+                #         username=data["username"],
+                #         password=Users.set_password(Users, data["password"])
+                #     )
+                #     db.session.add(user)
+                #     db.session.commit()
+                #     if user.id:
+                #         return Auth.authenticate(Auth, data["username"], data["password"])
+                #     else:
+                #         return falseReturn("注册失败")
+                # else:
+                #     return falseReturn("验证码错误")
         else:
             return falseReturn("请输入用户名")
 
