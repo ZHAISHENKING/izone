@@ -17,7 +17,7 @@ manager.add_command("runserver",
                         app=app,
                         host='0.0.0.0',
                         port=5000,
-                        use_debugger=True
+                        use_debugger=False
                     ))
 manager.add_command("db", MigrateCommand)
 
