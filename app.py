@@ -18,6 +18,7 @@ from admins import admin, login, AdminUser, db, ModelView
 from flask_babelex import Babel
 import logging
 from v1.views import *
+from v2.socket_api import socketio, async_mode
 from users.view import MyUserlView
 from flask_admin.contrib.fileadmin import FileAdmin
 
@@ -71,6 +72,7 @@ def create_app(config_name):
     admin.init_app(app)
     docs.init_app(app)
     config[config_name].init_app(app)
+    socketio.init_app(app, async_mode=async_mode)
     babel = Babel(app)
     init_login()
 

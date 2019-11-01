@@ -166,3 +166,9 @@ class UploadCover(Resource):
             return trueReturn(qiniu_url)
         else:
             return falseReturn("上传失败")
+
+
+class SocketAPI(Resource):
+    @catch_exception
+    def get(self):
+        return make_response(render_template('index.html'))
