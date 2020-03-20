@@ -13,8 +13,8 @@ from flask_restful import Resource
 import flask_login as login
 from flask_admin.contrib.sqla import ModelView
 import redis
-r = redis.StrictRedis("localhost", 6379, db=0)
 
+r = redis.StrictRedis("localhost", 6379, db=0)
 
 db = SQLAlchemy()
 
@@ -44,11 +44,21 @@ class AdminUser(db.Model):
     def get_id(self):
         return self.id
 
-    def set_password(self, password):
+    @staticmethod
+    def set_password(password):
         return generate_password_hash(password)
 
     def check_password(self, hash, password):
         return check_password_hash(hash, password)
+
+    @staticmethod
+    def reg(name, password):
+        user = AdminUser(
+            username=name,
+            password=AdminUser.set_password(password))
+        db.session.add(user)
+        db.session.commit()
+        return '创建成功'
 
     # Required for administrative interface
     def __unicode__(self):
@@ -138,7 +148,6 @@ class RegisterView(Resource):
         return make_response(render_template('form.html', form=self.form))
 
     def post(self):
-
         if self.form.validate():
             user = AdminUser()
 
